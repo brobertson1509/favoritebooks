@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" 
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" 
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" 
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <title>Edit Show</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
+    </head>
+    <body>
+        <div id="wrapper">   
+            <div id="editbook">   
+                <h1>{{this_book.title}}</h1>
+                {% if messages %}
+                <ul class="messages">    
+                    {% for message in messages %}    
+                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                <form action="/books/update/{{this_book.id}}" method="POST">
+                    {% csrf_token %}
+                    <label>
+                        Title <input value="{{this_book.title}}" type = "text" name = "title">
+                    </label>
+                    <p>Added by: {{this_book.uploaded_by.first_name}} {{this_book.uploaded_by.last_name}}</p>
+                    <p>Added on: {{this_book.created_at}}</p>
+                    <p>Last updated: {{this_book.updated_at}}</p>
+                    <label>
+                        Description <input value="{{this_book.description}}" type = "text" name = "description">
+                    </label>
+                    <button type="submit" name="save" value="Editbook">Update</button>
+                </form>
+
+
+                {% for book in all_books %}	
+                    {% if book.id == this_book.id %}
+                        <a href="/{{book.id}}/delete"> Delete</a>
+                    {% endif %}    
+                {% endfor %}
+                
+                <h1>Users who like this book</h1>
+                <ul>
+                {% for user in this_book.users_who_like.all %}
+                    {% if this_user.id == user.id %}
+                        <li>{{user.first_name}} {{user.last_name}} <a href="/books/removefavorite/{{this_book.id}}">Remove as Favorite</a></li>
+                    {% else %}
+                    <li>{{user.first_name}} {{user.last_name}}</li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+
+                {% if this_book in this_user.liked_books.all %}
+                    <p></p>
+                {% else %}
+                    <p><a href="/books/addfavorite/{{this_book.id}}">Add to Favorites</a></p>
+                {% endif %}
+                <p><a href="/books">Back to Books</a></p>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Welcome</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
+    </head>
+    <body>
+        <div id="wrapper">
+                <h1>Welcome, {{this_user.first_name}}!</h1>
+                <!--<p>Title: {{this_show.title}}</p>
+                <p>Network: {{this_show.network}}</p>
+                <p>Release Date: {{this_show.release_date}}</p>
+                <p>Description: {{this_show.description}}</p>
+                <p>Last Updated: {{this_show.updated_at}}</p>
+                <p><a href="{{this_show.id}}/edit">Edit</a>
+                    <a href="/shows/{{this_show.id}}/delete">Delete</a>
+                </p> -->
+                <h1>Add a favorite book</h1>
+                {% if messages %}
+                <ul class="messages">    
+                    {% for message in messages %}    
+                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                    {% endfor %}
+                </ul>
+                    {% endif %}
+                <form action="/book/create" method="POST">
+                    {% csrf_token %}
+                    <label>
+                        Title <input type = "text" name = "title">
+                    </label>
+                    <label>
+                        Description <input type = "text" name = "description">
+                    </label>
+                    <button type="submit" name="add">Add</button>
+                </form>
+                <h1>All Books</h1>
+                <ul>
+                    {% for book in all_books %}	
+                        <li>Title: <a href="/user/evaluate/{{book.id}}"> {{book.title}}</a></li>
+                        <li>Uploaded by: {{book.uploaded_by.first_name}} {{book.uploaded_by.last_name}}</li>
+                        {% if book in this_user.liked_books.all %}
+                            <li>This Book is a favorite</li>
+                        {% else %}   
+                            <li><a href="/books/addfavorite/{{book.id}}">Add as Favorite</a></li>
+                        {% endif %}
+                        <p></p>
+                    {% endfor %}
+                </ul>
+                <p><a href="database"> Database </a></p>
+                <p><a href="{{this_user.id}}/update"> Update user info </a></p>
+                <p><a href="logout">Logout</a></p>
+    </body>
+</html>

@@ -1,0 +1,7 @@
+{% for user in book.users_who_like.all %}
+                            {% if this_user.id == user.id %}
+                                <li>This Book is a favorite</li>
+                            {% else %}   
+                                <li><a href="/books/addfavorite/{{book.id}}">Add as Favorite</a></li>
+                            {% endif %}
+                        {% endfor %}

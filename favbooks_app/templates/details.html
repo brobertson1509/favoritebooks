@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Book Details</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/style.css' %}"> 
+    </head>
+    <body>
+        <div id="wrapper">
+                <h1>{{this_book.title}}</h1>
+                <p>Added by: {{this_book.uploaded_by.first_name}} {{this_book.uploaded_by.last_name}}</p>
+                <p>Added on: {{this_book.created_at}}</p>
+                <p>Last updated: {{this_book.updated_at}}</p>
+                <p>Description: {{this_book.description}}</p>
+                <h1>Users who like this book</h1>            
+                <ul>
+                {% for user in this_book.users_who_like.all %}
+                    {% if this_user.id == user.id %}
+                        <li>{{user.first_name}} {{user.last_name}} <a href="/books/removefavorite/{{this_book.id}}">Remove as Favorite</a></li>
+                    {% else %}
+                    <li>{{user.first_name}} {{user.last_name}}</li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+
+                {% if this_book in this_user.liked_books.all %}
+                    <p></p>
+                {% else %}
+                    <p><a href="/books/addfavorite/{{this_book.id}}">Add to Favorites</a></p>
+                {% endif %}
+                <p><a href="/books">Back to Books</a></p>
+    </body>
+</html>

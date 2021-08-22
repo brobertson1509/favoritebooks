@@ -1,0 +1,13 @@
+h1{
+color: rgb(60, 40, 148);
+}
+
+ul{
+    list-style: none;
+}
+
+table, tr, th, td{
+    width: 50%;
+    height: max-content;
+    white-space: none;
+}
